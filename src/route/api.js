@@ -21,4 +21,10 @@ userRouter.put(
   authMiddleware,
   contactController.update
 );
+
+userRouter.delete(
+  "/api/contacts/:contactId",
+  authMiddleware,
+  contactController.remove
+);
 export { userRouter };
