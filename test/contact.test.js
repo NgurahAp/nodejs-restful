@@ -89,6 +89,7 @@ describe("GET /api/contacts/:contactId", function () {
     expect(result.status).toBe(404);
   });
 });
+
 describe("PUT /api/contacts/:contactId", function () {
   beforeEach(async () => {
     await createTestUser();
@@ -118,5 +119,35 @@ describe("PUT /api/contacts/:contactId", function () {
     expect(result.body.data.last_name).toBe("Arya");
     expect(result.body.data.email).toBe("ngurah@gmail.com");
     expect(result.body.data.phone).toBe("08123455555");
+  });
+
+  it("Should reject if request is not valid", async () => {
+    const testContact = await getTestContact();
+
+    const result = await supertest(web)
+      .put("/api/contacts/" + testContact.id)
+      .set("Authorization", "test")
+      .send({
+        first_name: "",
+        last_name: "",
+        email: "ngurah",
+        phone: "",
+      });
+    expect(result.status).toBe(400);
+  });
+
+  it("Should reject if contact is not found", async () => {
+    const testContact = await getTestContact();
+
+    const result = await supertest(web)
+      .put("/api/contacts/" + testContact.id + 1)
+      .set("Authorization", "test")
+      .send({
+        first_name: "Ngurah",
+        last_name: "Arya",
+        email: "ngurah@gmail.com",
+        phone: "08123455555",
+      });
+    expect(result.status).toBe(404);
   });
 });
