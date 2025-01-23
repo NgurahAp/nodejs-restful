@@ -10,4 +10,5 @@ userRouter.patch("/api/users/current", authMiddleware, userController.update);
 userRouter.delete("/api/users/logout", authMiddleware, userController.logout);
 
 userRouter.post("/api/contacts", authMiddleware, contactController.create);
+userRouter.get("/api/contacts/:contactId", authMiddleware, contactController.get);
 export { userRouter };
