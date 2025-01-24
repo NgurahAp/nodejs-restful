@@ -37,4 +37,10 @@ userRouter.post(
   addressController.create
 );
 
+userRouter.get(
+  "/api/contacts/:contactId/addresses/:addressId",
+  authMiddleware,
+  addressController.get
+);
+
 export { userRouter };
