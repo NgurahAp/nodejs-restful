@@ -10,6 +10,7 @@ import {
   removeTestUser,
 } from "./test.util.js";
 import { web } from "../src/application/web.js";
+import e from "express";
 
 describe("POST /api/contacts/:contactId/addresses", function () {
   beforeEach(async () => {
@@ -134,6 +135,102 @@ describe("GET /api/contacts/:contactId/addresses/:addressId", function () {
         "/api/contacts/" + testContact.id + "/addresses/" + (testAddress.id + 1)
       )
       .set("Authorization", "test");
+
+    expect(result.status).toBe(404);
+  });
+});
+
+describe("PUT /api/contacts/:contactId/addresses/:addressId", function () {
+  beforeEach(async () => {
+    await createTestUser();
+    await createTestContact();
+    await createTestAddress();
+  });
+
+  afterEach(async () => {
+    await removeAllTestAddresses();
+    await removeAllTestContacts();
+    await removeTestUser();
+  });
+
+  it("Should can update address", async () => {
+    const testContact = await getTestContact();
+    const testAddress = await getTestAddress();
+
+    const result = await supertest(web)
+      .put("/api/contacts/" + testContact.id + "/addresses/" + testAddress.id)
+      .set("Authorization", "test")
+      .send({
+        street: "Jalan baru",
+        city: "Kota baru",
+        province: "Provinsi baru",
+        country: "Indonesia baru",
+        postal_code: "54321",
+      });
+
+    expect(result.status).toBe(200);
+    expect(result.body.data.id).toBe(testAddress.id);
+    expect(result.body.data.street).toBe("Jalan baru");
+    expect(result.body.data.city).toBe("Kota baru");
+    expect(result.body.data.province).toBe("Provinsi baru");
+    expect(result.body.data.country).toBe("Indonesia baru");
+    expect(result.body.data.postal_code).toBe("54321");
+  });
+
+  it("Should reject if request is not valid", async () => {
+    const testContact = await getTestContact();
+    const testAddress = await getTestAddress();
+
+    const result = await supertest(web)
+      .put("/api/contacts/" + testContact.id + "/addresses/" + testAddress.id)
+      .set("Authorization", "test")
+      .send({
+        street: "Jalan baru",
+        city: "Kota baru",
+        province: "Provinsi baru",
+        country: "",
+        postal_code: "",
+      });
+
+    expect(result.status).toBe(400);
+  });
+
+  it("Should reject if address is not found", async () => {
+    const testContact = await getTestContact();
+    const testAddress = await getTestAddress();
+
+    const result = await supertest(web)
+      .put(
+        "/api/contacts/" + testContact.id + "/addresses/" + (testAddress.id + 1)
+      )
+      .set("Authorization", "test")
+      .send({
+        street: "Jalan baru",
+        city: "Kota baru",
+        province: "Provinsi baru",
+        country: "Indonesia baru",
+        postal_code: "54321",
+      });
+
+    expect(result.status).toBe(404);
+  });
+
+  it("Should reject if contact is not found", async () => {
+    const testContact = await getTestContact();
+    const testAddress = await getTestAddress();
+
+    const result = await supertest(web)
+      .put(
+        "/api/contacts/" + (testContact.id + 1) + "/addresses/" + testAddress.id
+      )
+      .set("Authorization", "test")
+      .send({
+        street: "Jalan baru",
+        city: "Kota baru",
+        province: "Provinsi baru",
+        country: "Indonesia baru",
+        postal_code: "54321",
+      });
 
     expect(result.status).toBe(404);
   });

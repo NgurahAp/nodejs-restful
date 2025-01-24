@@ -42,5 +42,10 @@ userRouter.get(
   authMiddleware,
   addressController.get
 );
+userRouter.put(
+  "/api/contacts/:contactId/addresses/:addressId",
+  authMiddleware,
+  addressController.update
+);
 
 export { userRouter };
