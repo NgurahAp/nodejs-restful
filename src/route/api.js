@@ -48,4 +48,10 @@ userRouter.put(
   addressController.update
 );
 
+userRouter.delete(
+  "/api/contacts/:contactId/addresses/:addressId",
+  authMiddleware,
+  addressController.remove
+);
+
 export { userRouter };
