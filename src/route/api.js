@@ -27,4 +27,6 @@ userRouter.delete(
   authMiddleware,
   contactController.remove
 );
+
+userRouter.get("/api/contacts", authMiddleware, contactController.search);
 export { userRouter };
