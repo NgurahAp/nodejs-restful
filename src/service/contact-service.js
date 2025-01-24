@@ -7,7 +7,7 @@ import {
   searchContactValidation,
   updateContactValidation,
 } from "../validation/contact-validation";
-import { validate } from "../validation/validation";
+import { validate } from "../validation/validation.js";
 
 const create = async (user, request) => {
   const contact = validate(createContactValidation, request);
@@ -110,7 +110,7 @@ const search = async (user, request) => {
   // 1 ((page - 1) * size) = 0
   // 2 ((page - 1) * size) = 10
   const skip = (request.page - 1) * request.size;
-  
+
   const filters = [];
 
   filters.push({
