@@ -1,8 +1,48 @@
-# Address API Spec
+# Contact API Spec
 
-## Create Address API
+## Create Contact API
 
-Endpoint : POST /api/contacts/:contactId/addresses
+Endpoint : POST /api/contacts
+
+Headers : 
+- Authorization : token
+
+Request Body :
+
+```json
+{
+  "first_name" : "Eko",
+  "last_name" : "Khannedy",
+  "email" : "eko@pzn.com",
+  "phone" : "32423423434"
+}
+```
+
+Response Body Success : 
+
+```json
+{
+  "data" : {
+    "id" : 1,
+    "first_name" : "Eko",
+    "last_name" : "Khannedy",
+    "email" : "eko@pzn.com",
+    "phone" : "32423423434"
+  }
+}
+```
+
+Response Body Error :
+
+```json
+{
+  "errors" : "Email is not valid format"
+}
+```
+
+## Update Contact API
+
+Endpoint : PUT /api/contacts/:id
 
 Headers :
 - Authorization : token
@@ -11,11 +51,10 @@ Request Body :
 
 ```json
 {
-  "street" : "Jalan apa",
-  "city" : "Kota apa",
-  "province" : "Provinsi apa",
-  "country" : "Negara apa",
-  "postal_code" : "Kode pos"
+  "first_name" : "Eko",
+  "last_name" : "Khannedy",
+  "email" : "eko@pzn.com",
+  "phone" : "32423423434"
 }
 ```
 
@@ -25,11 +64,10 @@ Response Body Success :
 {
   "data" : {
     "id" : 1,
-    "street" : "Jalan apa",
-    "city" : "Kota apa",
-    "province" : "Provinsi apa",
-    "country" : "Negara apa",
-    "postal_code" : "Kode pos"
+    "first_name" : "Eko",
+    "last_name" : "Khannedy",
+    "email" : "eko@pzn.com",
+    "phone" : "32423423434"
   }
 }
 ```
@@ -38,55 +76,13 @@ Response Body Error :
 
 ```json
 {
-  "errors" : "Country is required" 
+  "errors" : "Email is not valid format"
 }
 ```
 
-## Update Address API
+## Get Contact API
 
-Endpoint : PUT /api/contacts/:contactId/addresses/:addressId
-
-Headers :
-- Authorization : token
-
-Request Body :
-
-```json
-{
-  "street" : "Jalan apa",
-  "city" : "Kota apa",
-  "province" : "Provinsi apa",
-  "country" : "Negara apa",
-  "postal_code" : "Kode pos"
-}
-```
-
-Response Body Success :
-
-```json
-{
-  "data" : {
-    "id" : 1,
-    "street" : "Jalan apa",
-    "city" : "Kota apa",
-    "province" : "Provinsi apa",
-    "country" : "Negara apa",
-    "postal_code" : "Kode pos"
-  }
-}
-```
-
-Response Body Error :
-
-```json
-{
-  "errors" : "Country is required"
-}
-```
-
-## Get Address API
-
-Endpoint : GET /api/contacts/:contactId/addresses/:addressId
+Endpoint : GET /api/contacts/:id
 
 Headers :
 - Authorization : token
@@ -97,11 +93,10 @@ Response Body Success :
 {
   "data" : {
     "id" : 1,
-    "street" : "Jalan apa",
-    "city" : "Kota apa",
-    "province" : "Provinsi apa",
-    "country" : "Negara apa",
-    "postal_code" : "Kode pos"
+    "first_name" : "Eko",
+    "last_name" : "Khannedy",
+    "email" : "eko@pzn.com",
+    "phone" : "32423423434"
   }
 }
 ```
@@ -110,53 +105,57 @@ Response Body Error :
 
 ```json
 {
-  "errors" : "contact is not found"
+  "errors" : "Contact is not found"
 }
 ```
 
-## List Addresses API
+## Search Contact API
 
-Endpoint : GET /api/contacts/:contactId/addresses
+Endpoint : GET /api/contacts
 
 Headers :
 - Authorization : token
 
+Query params :
+- name : Search by first_name or last_name, using like, optional
+- email : Search by email using like, optional
+- phone : Search by phone using like, optional
+- page : number of page, default 1
+- size : size per page, default 10
+
 Response Body Success :
 
-```json 
+```json
 {
   "data" : [
     {
       "id" : 1,
-      "street" : "Jalan apa",
-      "city" : "Kota apa",
-      "province" : "Provinsi apa",
-      "country" : "Negara apa",
-      "postal_code" : "Kode pos"
+      "first_name" : "Eko",
+      "last_name" : "Khannedy",
+      "email" : "eko@pzn.com",
+      "phone" : "32423423434"
     },
     {
-      "id" : 1,
-      "street" : "Jalan apa",
-      "city" : "Kota apa",
-      "province" : "Provinsi apa",
-      "country" : "Negara apa",
-      "postal_code" : "Kode pos"
+      "id" : 2,
+      "first_name" : "Eko",
+      "last_name" : "Khannedy",
+      "email" : "eko@pzn.com",
+      "phone" : "32423423434"
     }
-  ]
+  ],
+  "paging" : {
+    "page" : 1,
+    "total_page" : 3,
+    "total_item" : 30
+  }
 }
 ```
 
 Response Body Error :
 
-```json
-{
-  "errors" : "contact is not found"
-}
-```
+## Remove Contact API
 
-## Remove Address API
-
-Endpoint : DELETE /api/contacts/:contactId/addresses/:addressId
+Endpoint : DELETE /api/contacts/:id
 
 Headers :
 - Authorization : token
@@ -173,6 +172,6 @@ Response Body Error :
 
 ```json
 {
-  "errors" : "address is not found"
+  "errors" : "Contact is not found"
 }
 ```

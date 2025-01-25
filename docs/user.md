@@ -1,20 +1,48 @@
-# Contact API Spec
+# User API Spec
 
-## Create Contact API
+## Register User API
 
-Endpoint : POST /api/contacts
-
-Headers : 
-- Authorization : token
+Endpoint :  POST /api/users 
 
 Request Body :
 
 ```json
 {
-  "first_name" : "Eko",
-  "last_name" : "Khannedy",
-  "email" : "eko@pzn.com",
-  "phone" : "32423423434"
+  "username" : "pzn",
+  "password" : "rahasia",
+  "name" : "Programmer Zaman Now"
+}
+```
+
+Response Body Success :
+
+```json
+{
+  "data" : {
+    "username" : "pzn",
+    "name" : "Programmer Zaman Now"
+  }
+}
+```
+
+Response Body Error : 
+
+```json
+{
+  "errors" : "Username already registered"
+}
+```
+
+## Login User API
+
+Endpoint : POST /api/users/login
+
+Request Body :
+
+```json
+{
+  "username" : "pzn",
+  "password" : "rahasia"
 }
 ```
 
@@ -23,11 +51,7 @@ Response Body Success :
 ```json
 {
   "data" : {
-    "id" : 1,
-    "first_name" : "Eko",
-    "last_name" : "Khannedy",
-    "email" : "eko@pzn.com",
-    "phone" : "32423423434"
+    "token" : "unique-token"
   }
 }
 ```
@@ -36,131 +60,79 @@ Response Body Error :
 
 ```json
 {
-  "errors" : "Email is not valid format"
+  "errors" : "Username or password wrong"
 }
 ```
 
-## Update Contact API
+## Update User API
 
-Endpoint : PUT /api/contacts/:id
+Endpoint : PATCH /api/users/current
 
 Headers :
-- Authorization : token
+- Authorization : token 
 
 Request Body :
 
 ```json
 {
-  "first_name" : "Eko",
-  "last_name" : "Khannedy",
-  "email" : "eko@pzn.com",
-  "phone" : "32423423434"
+  "name" : "Programmer Zaman Now Lagi", // optional
+  "password" : "new password" // optional
 }
 ```
 
-Response Body Success :
+Response Body Success : 
 
 ```json
 {
   "data" : {
-    "id" : 1,
-    "first_name" : "Eko",
-    "last_name" : "Khannedy",
-    "email" : "eko@pzn.com",
-    "phone" : "32423423434"
+    "username" : "pzn",
+    "name" : "Programmer Zaman Now Lagi"
   }
 }
 ```
 
-Response Body Error :
+Response Body Error : 
 
 ```json
 {
-  "errors" : "Email is not valid format"
+  "errors" : "Name length max 100"
 }
 ```
 
-## Get Contact API
+## Get User API
 
-Endpoint : GET /api/contacts/:id
+Endpoint : GET /api/users/current
 
 Headers :
 - Authorization : token
 
-Response Body Success :
+Response Body Success:
 
 ```json
 {
   "data" : {
-    "id" : 1,
-    "first_name" : "Eko",
-    "last_name" : "Khannedy",
-    "email" : "eko@pzn.com",
-    "phone" : "32423423434"
+    "username" : "pzn",
+    "name" : "Programmer Zaman Now"
   }
 }
 ```
 
-Response Body Error :
+Response Body Error : 
 
 ```json
 {
-  "errors" : "Contact is not found"
+  "errors" : "Unauthorized"
 }
 ```
 
-## Search Contact API
+## Logout User API
 
-Endpoint : GET /api/contacts
+Endpoint : DELETE /api/users/logout
 
 Headers :
 - Authorization : token
 
-Query params :
-- name : Search by first_name or last_name, using like, optional
-- email : Search by email using like, optional
-- phone : Search by phone using like, optional
-- page : number of page, default 1
-- size : size per page, default 10
-
-Response Body Success :
-
-```json
-{
-  "data" : [
-    {
-      "id" : 1,
-      "first_name" : "Eko",
-      "last_name" : "Khannedy",
-      "email" : "eko@pzn.com",
-      "phone" : "32423423434"
-    },
-    {
-      "id" : 2,
-      "first_name" : "Eko",
-      "last_name" : "Khannedy",
-      "email" : "eko@pzn.com",
-      "phone" : "32423423434"
-    }
-  ],
-  "paging" : {
-    "page" : 1,
-    "total_page" : 3,
-    "total_item" : 30
-  }
-}
-```
-
-Response Body Error :
-
-## Remove Contact API
-
-Endpoint : DELETE /api/contacts/:id
-
-Headers :
-- Authorization : token
-
-Response Body Success :
+Response Body Success : 
 
 ```json
 {
@@ -168,10 +140,10 @@ Response Body Success :
 }
 ```
 
-Response Body Error :
+Response Body Error : 
 
 ```json
 {
-  "errors" : "Contact is not found"
+  "errors" : "Unauthorized"
 }
 ```
